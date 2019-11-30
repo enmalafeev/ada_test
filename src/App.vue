@@ -1,14 +1,25 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/">Fractional Calculator</router-link> |
+      <router-link to="/websocket">Websocket</router-link>
     </div>
     <router-view/>
   </div>
 </template>
 
 <style lang="scss">
+body,
+html {
+  margin: 0;
+  height: 100%;
+  font-style: 16px;
+  line-height: 1.4;
+}
+
+* {
+  box-sizing: border-box;
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
