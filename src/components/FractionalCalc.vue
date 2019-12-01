@@ -2,7 +2,7 @@
   <div>
     <h1>{{ msg }}</h1>
     <div class="fraction-wrap">
-      <div class="fraction-box">
+      <div class="fraction-box fraction-box__with-sign">
         <div class="fraction">
           <input type="text" class="numerator" v-model="firstNumerator">
           <input type="text" class="denominator" v-model="firstDenominator">
@@ -26,11 +26,13 @@
         <div class="result-denominator">{{this.resultDenominator}}</div>
       </div>
     </div>
-    <button class="add-fraction-btn">add fraction</button>
+    <a class="add-fraction-btn">add fraction</a>
   </div>
 </template>
 
 <script>
+// import FractionWithSign from './FractionWithSign';
+
 export default {
   name: 'FractionalCalc',
   props: {

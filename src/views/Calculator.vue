@@ -9,7 +9,7 @@
 import FractionalCalc from '@/components/FractionalCalc.vue';
 
 export default {
-  name: 'home',
+  name: 'calculator',
   components: {
     FractionalCalc,
   },
