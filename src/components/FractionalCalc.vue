@@ -4,11 +4,11 @@
     <div class="fraction-wrap">
       <div class="fraction-box">
         <div class="fraction">
-          <input type="text" class="numerator">
-          <input type="text" class="denominator">
+          <input type="text" class="numerator" v-model="firstNumerator">
+          <input type="text" class="denominator" v-model="firstDenominator">
         </div>
         <div class="sign-box">
-          <select class="sign">
+          <select class="sign" v-model="sign" @change="divide()">
             <option value="+" selected>+</option>
             <option value="-">-</option>
             <option value="*">*</option>
@@ -17,15 +17,16 @@
         </div>
       </div>
       <div class="fraction">
-        <input type="text" class="numerator">
-        <input type="text" class="denominator">
+        <input type="text" class="numerator" v-model="secondNumerator">
+        <input type="text" class="denominator" v-model="secondDenominator">
       </div>
       <b class="equal-sign">=</b>
       <div class="result">
-        <div class="result-numerator">?</div>
-        <div class="result-denominator">?</div>
+        <div class="result-numerator">{{this.resultNumerator}}</div>
+        <div class="result-denominator">{{this.resultDenominator}}</div>
       </div>
     </div>
+    <button class="add-fraction-btn">add fraction</button>
   </div>
 </template>
 
@@ -35,14 +36,70 @@ export default {
   props: {
     msg: String,
   },
+  data() {
+    return {
+      firstNumerator: '',
+      firstDenominator: '',
+      secondNumerator: '',
+      secondDenominator: '',
+      sign: '+',
+      resultNumerator: '',
+      resultDenominator: '',
+    };
+  },
+  watch: {
+  },
+  methods: {
+    findGcd(a, b) {
+      const minNum = Math.abs(Math.min(a, b));
+      const maxNum = Math.abs(Math.max(a, b));
+      const acc = [];
+      for (let i = 1; i <= minNum; i += 1) {
+        if (minNum % i === 0 && maxNum % i === 0) {
+          acc.push(i);
+        }
+      }
+      return acc.sort((x, y) => y - x)[0];
+    },
+    add() {
+      const numerator = (this.firstNumerator * this.secondDenominator)
+        + (this.firstDenominator * this.secondNumerator);
+      const denominator = (this.firstDenominator * this.secondDenominator);
+      const gcd = this.findGcd(numerator, denominator);
+      this.resultNumerator = numerator / gcd;
+      this.resultDenominator = denominator / gcd;
+    },
+    substraction() {
+      const numerator = (this.firstNumerator * this.secondDenominator)
+        - (this.firstDenominator * this.secondNumerator);
+      const denominator = (this.firstDenominator * this.secondDenominator);
+      const gcd = this.findGcd(numerator, denominator);
+      this.resultNumerator = numerator / gcd;
+      this.resultDenominator = denominator / gcd;
+    },
+    multiply() {
+      const numerator = this.firstNumerator * this.secondNumerator;
+      const denominator = this.firstDenominator * this.secondDenominator;
+      const gcd = this.findGcd(numerator, denominator);
+      this.resultNumerator = numerator / gcd;
+      this.resultDenominator = denominator / gcd;
+    },
+    divide() {
+      const numerator = this.firstNumerator * this.secondDenominator;
+      const denominator = this.firstDenominator * this.secondNumerator;
+      const gcd = this.findGcd(numerator, denominator);
+      this.resultNumerator = numerator / gcd;
+      this.resultDenominator = denominator / gcd;
+    },
+  },
 };
 </script>
 
 <style scoped lang="scss">
 .fraction-wrap {
   display: flex;
-  justify-content: flex-start;
-  padding: 0 20px;
+  justify-content: center;
+  padding: 30px 20px;
 }
 .fraction-box {
   width: 120px;
@@ -136,6 +193,18 @@ input {
     width: 100%;
     height: 5px;
     background-color: #000;
+  }
+}
+
+.add-fraction-btn {
+  border: none;
+  font-size: 25px;
+  color: #42b983;
+  text-decoration: underline;
+  text-transform: uppercase;
+  &:hover,
+  &:active {
+    color: darken($color: #42b983, $amount: 15);
   }
 }
 
