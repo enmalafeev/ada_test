@@ -4,12 +4,12 @@
     <div class="fraction-wrap">
       <div class="fraction-box fraction-box__with-sign">
         <div class="fraction">
-          <input type="text" class="numerator" v-model="firstNumerator">
-          <input type="text" class="denominator" v-model="firstDenominator">
+          <input type="text" class="numerator" v-model="numsObj[0].firstNumerator">
+          <input type="text" class="denominator" v-model="numsObj[0].firstDenominator">
         </div>
         <div class="sign-box">
-          <select class="sign" v-model="sign" @change="divide()">
-            <option value="+" selected>+</option>
+          <select class="sign" v-model="numsObj[0].sign">
+            <option value="+">+</option>
             <option value="-">-</option>
             <option value="*">*</option>
             <option value="/">/</option>
@@ -17,13 +17,13 @@
         </div>
       </div>
       <div class="fraction">
-        <input type="text" class="numerator" v-model="secondNumerator">
-        <input type="text" class="denominator" v-model="secondDenominator">
+        <input type="text" class="numerator" v-model="numsObj[1].secondNumerator">
+        <input type="text" class="denominator" v-model="numsObj[1].secondDenominator">
       </div>
       <b class="equal-sign">=</b>
       <div class="result">
-        <div class="result-numerator">{{this.resultNumerator}}</div>
-        <div class="result-denominator">{{this.resultDenominator}}</div>
+        <div class="result-numerator">{{this.getResult.resultNumerator}}</div>
+        <div class="result-denominator">{{this.getResult.resultDenominator}}</div>
       </div>
     </div>
     <a class="add-fraction-btn">add fraction</a>
@@ -31,7 +31,6 @@
 </template>
 
 <script>
-// import FractionWithSign from './FractionWithSign';
 
 export default {
   name: 'FractionalCalc',
@@ -40,16 +39,40 @@ export default {
   },
   data() {
     return {
-      firstNumerator: '',
-      firstDenominator: '',
-      secondNumerator: '',
-      secondDenominator: '',
-      sign: '+',
-      resultNumerator: '',
-      resultDenominator: '',
+      numsObj: [
+        {
+          firstNumerator: '',
+          firstDenominator: '',
+          sign: '',
+        },
+        {
+          secondNumerator: '',
+          secondDenominator: '',
+        },
+      ],
+      resultObj: {
+        resultNumerator: '',
+        resultDenominator: '',
+      },
     };
   },
-  watch: {
+  computed: {
+    getResult() {
+      return this.numsObj.reduce((cur, next) => {
+        switch (cur.sign) {
+          case '+':
+            return this.add(cur, next);
+          case '-':
+            return this.substraction(cur, next);
+          case '*':
+            return this.multiply(cur, next);
+          case '/':
+            return this.divide(cur, next);
+          default:
+            return {};
+        }
+      });
+    },
   },
   methods: {
     findGcd(a, b) {
@@ -63,35 +86,51 @@ export default {
       }
       return acc.sort((x, y) => y - x)[0];
     },
-    add() {
-      const numerator = (this.firstNumerator * this.secondDenominator)
-        + (this.firstDenominator * this.secondNumerator);
-      const denominator = (this.firstDenominator * this.secondDenominator);
+    add(x, y) {
+      const numerator = (x.firstNumerator * y.secondDenominator)
+        + (x.firstDenominator * y.secondNumerator);
+      const denominator = (x.firstDenominator * y.secondDenominator);
       const gcd = this.findGcd(numerator, denominator);
-      this.resultNumerator = numerator / gcd;
-      this.resultDenominator = denominator / gcd;
+      const resultNumerator = numerator / gcd;
+      const resultDenominator = denominator / gcd;
+      return {
+        resultNumerator,
+        resultDenominator,
+      };
     },
-    substraction() {
-      const numerator = (this.firstNumerator * this.secondDenominator)
-        - (this.firstDenominator * this.secondNumerator);
-      const denominator = (this.firstDenominator * this.secondDenominator);
+    substraction(x, y) {
+      const numerator = (x.firstNumerator * y.secondDenominator)
+        - (x.firstDenominator * y.secondNumerator);
+      const denominator = (x.firstDenominator * y.secondDenominator);
       const gcd = this.findGcd(numerator, denominator);
-      this.resultNumerator = numerator / gcd;
-      this.resultDenominator = denominator / gcd;
+      const resultNumerator = numerator / gcd;
+      const resultDenominator = denominator / gcd;
+      return {
+        resultNumerator,
+        resultDenominator,
+      };
     },
-    multiply() {
-      const numerator = this.firstNumerator * this.secondNumerator;
-      const denominator = this.firstDenominator * this.secondDenominator;
+    multiply(x, y) {
+      const numerator = x.firstNumerator * y.secondNumerator;
+      const denominator = x.firstDenominator * y.secondDenominator;
       const gcd = this.findGcd(numerator, denominator);
-      this.resultNumerator = numerator / gcd;
-      this.resultDenominator = denominator / gcd;
+      const resultNumerator = numerator / gcd;
+      const resultDenominator = denominator / gcd;
+      return {
+        resultNumerator,
+        resultDenominator,
+      };
     },
-    divide() {
-      const numerator = this.firstNumerator * this.secondDenominator;
-      const denominator = this.firstDenominator * this.secondNumerator;
+    divide(x, y) {
+      const numerator = x.firstNumerator * y.secondDenominator;
+      const denominator = x.firstDenominator * y.secondNumerator;
       const gcd = this.findGcd(numerator, denominator);
-      this.resultNumerator = numerator / gcd;
-      this.resultDenominator = denominator / gcd;
+      const resultNumerator = numerator / gcd;
+      const resultDenominator = denominator / gcd;
+      return {
+        resultNumerator,
+        resultDenominator,
+      };
     },
   },
 };
