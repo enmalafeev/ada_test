@@ -32,18 +32,18 @@ export default {
       fractionList: state => state.fractionList,
     }),
     getResult() {
-      return this.fractionList.reduce((acc, prev) => {
-        switch (acc.sign) {
+      return this.fractionList.reduce((cur, next) => {
+        switch (cur.sign) {
           case '+':
-            return this.add(acc, prev);
+            return this.add(cur, next, cur.sign);
           case '-':
-            return this.substraction(acc, prev);
+            return this.substraction(cur, next, cur.sign);
           case '*':
-            return this.multiply(acc, prev);
+            return this.multiply(cur, next, cur.sign);
           case '/':
-            return this.divide(acc, prev);
+            return this.divide(cur, next, cur.sign);
           default:
-            return acc;
+            return cur;
         }
       });
     },
@@ -64,7 +64,7 @@ export default {
       }
       return acc.sort((x, y) => y - x)[0];
     },
-    add(x, y) {
+    add(x, y, sign) {
       const curNumerator = (x.numerator * y.denominator)
         + (x.denominator * y.numerator);
       const curDenominator = (x.denominator * y.denominator);
@@ -74,9 +74,10 @@ export default {
       return {
         numerator,
         denominator,
+        sign,
       };
     },
-    substraction(x, y) {
+    substraction(x, y, sign) {
       const curNumerator = (x.numerator * y.denominator)
         - (x.denominator * y.numerator);
       const curDenominator = (x.denominator * y.denominator);
@@ -86,9 +87,10 @@ export default {
       return {
         numerator,
         denominator,
+        sign,
       };
     },
-    multiply(x, y) {
+    multiply(x, y, sign) {
       const curNumerator = x.numerator * y.numerator;
       const curDenominator = x.denominator * y.denominator;
       const gcd = this.findGcd(curNumerator, curDenominator);
@@ -97,9 +99,10 @@ export default {
       return {
         numerator,
         denominator,
+        sign,
       };
     },
-    divide(x, y) {
+    divide(x, y, sign) {
       const curNumerator = x.numerator * y.denominator;
       const curDenominator = x.denominator * y.numerator;
       const gcd = this.findGcd(curNumerator, curDenominator);
@@ -108,6 +111,7 @@ export default {
       return {
         numerator,
         denominator,
+        sign,
       };
     },
   },
