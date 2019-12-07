@@ -121,6 +121,7 @@ export default {
 <style scoped lang="scss">
 .fraction-wrap {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   padding: 30px 20px;
 }
@@ -129,6 +130,7 @@ export default {
   display: flex;
   justify-content: space-between;
   margin-right: 20px;
+  margin-bottom: 20px;
 }
 .fraction {
   width: 50px;
