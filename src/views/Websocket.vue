@@ -11,31 +11,28 @@
       </button>
     </form>
     <ul class="comment-list">
-      <li class="comment-item" v-for="comment in comments" :key="comment">
-        <span>{{comment}}</span>
-        <button class="remove-btn" @click="removeComment">Удалить</button>
+      <li class="comment-item" v-for="comment in comments" :key="comment.id">
+        <span>{{comment.text}}</span>
+        <button class="remove-btn" @click="removeComment(comment.id)">Удалить</button>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   data() {
     return {
       ws: null,
       wsResponse: null,
-      comments: [
-        'Тестовый коммент 1',
-        'Это шедевр',
-        'Это прекрасно',
-        'Лучшее, что я видел',
-        'Два чая этому автору',
-        'Тестовый коммент 2',
-        'Чудеса случаюся',
-        'Случайности неслучайны',
-      ],
     };
+  },
+  computed: {
+    ...mapState({
+      comments: state => state.comments,
+    }),
   },
   created() {
     this.ws = new WebSocket('ws://echo.websocket.org');
@@ -48,8 +45,12 @@ export default {
     addComment() {
       this.ws.send(2);
     },
-    removeComment() {
-      this.ws.send(1);
+    removeComment(id) {
+      this.ws.send(id);
+      if (this.wsResponse === id) {
+        return this.comments.filter(comment => comment.id !== id);
+      }
+      return null;
     },
   },
 };
@@ -69,7 +70,6 @@ export default {
   font-size: 16px;
   padding: 0 15px;
 }
-
 .submit-btn {
   width: 150px;
   min-height: 50px;
