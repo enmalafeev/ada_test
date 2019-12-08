@@ -42,7 +42,7 @@ export default {
           case '/':
             return this.divide(cur, next, cur.sign);
           default:
-            return cur;
+            return {};
         }
       });
     },
