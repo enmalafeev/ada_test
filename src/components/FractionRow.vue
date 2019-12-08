@@ -1,8 +1,20 @@
 <template>
     <div class="fraction-box fraction-box__with-sign">
       <div class="fraction">
-        <input type="text" class="numerator" v-model="fraction.numerator">
-        <input type="text" class="denominator" v-model="fraction.denominator">
+        <span class='error-text'>{{ validation.firstError("fraction.numerator") }}</span>
+        <input
+          type="text"
+          class="numerator"
+          v-model="fraction.numerator"
+          @change="validate"
+          :class="{error: validation.hasError('fraction.numerator')}">
+        <span class='error-text'>{{ validation.firstError("fraction.denominator") }}</span>
+        <input
+          type="text"
+          class="denominator"
+          v-model="fraction.denominator"
+          @change="validate"
+          :class="{error: validation.hasError('fraction.denominator')}">
       </div>
       <div class="sign-box">
         <template v-if="fraction.sign === '='">
@@ -21,11 +33,30 @@
 </template>
 
 <script>
+import SimpleVueValidator from 'simple-vue-validator';
+
+const { Validator } = SimpleVueValidator;
+
 export default {
   name: 'FractionRow',
   props: {
     fraction: Object,
     default: () => Object,
+  },
+  mixins: [SimpleVueValidator.mixin],
+  validators: {
+    'fraction.numerator': value => Validator.value(value).required().integer('Only Integer type').greaterThan(0),
+    'fraction.denominator': value => Validator.value(value).required().integer('Only Integer type').greaterThan(0),
+  },
+  methods: {
+    validate() {
+      this.$validate().then((success) => {
+        if (!success) {
+          return null;
+        }
+        return null;
+      });
+    },
   },
 };
 </script>
@@ -92,5 +123,18 @@ input {
   justify-content: center;
   align-items: center;
   font-size: 25px;
+}
+
+.error {
+  border: 2px solid firebrick;
+}
+
+.error-text {
+  position: absolute;
+  top: -45px;
+  left: -75px;
+  color: firebrick;
+  display: inline-block;
+  width: 200px;
 }
 </style>

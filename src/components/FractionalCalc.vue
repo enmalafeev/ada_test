@@ -10,7 +10,6 @@
         <div class="result-denominator">{{this.getResult.denominator}}</div>
       </div>
     </div>
-    <div>{{this.getResult}}</div>
     <a class="add-fraction-btn" @click.prevent="addNewFraction">add fraction</a>
   </div>
 </template>
