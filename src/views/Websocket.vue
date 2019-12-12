@@ -44,22 +44,28 @@ export default {
   },
   created() {
     this.ws = new WebSocket('ws://echo.websocket.org');
-    this.ws.onmessage = (event) => {
-      this.wsResponse = event.data;
-    };
     this.ws.onerror = error => alert(error.message);
   },
   methods: {
     ...mapMutations(['removeComment', 'addComment']),
     removeCurrentComment(id) {
       this.ws.send(id);
-      this.removeComment(id);
+      this.ws.onmessage = (event) => {
+        if (event.data === id) {
+          this.removeComment(id);
+          this.text = '';
+        }
+      };
     },
     addNewComment() {
       const id = uniqueId();
       this.ws.send(id);
-      this.addComment({ id, text: this.text });
-      this.text = '';
+      this.ws.onmessage = (event) => {
+        if (event.data === id) {
+          this.addComment({ id, text: this.text });
+          this.text = '';
+        }
+      };
     },
   },
 };
