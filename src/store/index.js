@@ -68,7 +68,10 @@ export default new Vuex.Store({
       return state.fractionList.unshift({ ...state.fraction, id: uniqueId() });
     },
     removeComment(state, id) {
-      return state.comments.filter(comment => comment.id !== id);
+      state.comments = state.comments.filter(comment => comment.id !== id);
+    },
+    addComment(state, comment) {
+      state.comments.push(comment);
     },
   },
   actions: {

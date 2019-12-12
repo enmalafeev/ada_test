@@ -2,35 +2,43 @@
   <div>
     <h1>This is an websocket page</h1>
     <form action="#" class="input-form">
-      <input type="text" class="input" placeholder="Введите текст комментария">
+      <input
+        required
+        type="text"
+        class="input"
+        placeholder="Введите текст комментария"
+        v-model="text">
       <button
         type="submit"
         class="submit-btn"
-        @click.prevent="addComment">
+        @click.prevent="addNewComment">
         Добавить комментарий
       </button>
     </form>
     <ul class="comment-list">
       <li class="comment-item" v-for="comment in comments" :key="comment.id">
         <span>{{comment.text}}</span>
-        <button class="remove-btn" @click="removeComment(comment.id)">Удалить</button>
+        <button class="remove-btn" @click="removeCurrentComment(comment.id)">Удалить</button>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
+import { uniqueId } from 'lodash';
 
 export default {
   data() {
     return {
       ws: null,
       wsResponse: null,
+      text: '',
     };
   },
   computed: {
     ...mapState({
+      comment: state => state.comment,
       comments: state => state.comments,
     }),
   },
@@ -42,15 +50,16 @@ export default {
     this.ws.onerror = error => alert(error.message);
   },
   methods: {
-    addComment() {
-      this.ws.send(2);
-    },
-    removeComment(id) {
+    ...mapMutations(['removeComment', 'addComment']),
+    removeCurrentComment(id) {
       this.ws.send(id);
-      if (this.wsResponse === id) {
-        return this.comments.filter(comment => comment.id !== id);
-      }
-      return null;
+      this.removeComment(id);
+    },
+    addNewComment() {
+      const id = uniqueId();
+      this.ws.send(id);
+      this.addComment({ id, text: this.text });
+      this.text = '';
     },
   },
 };
