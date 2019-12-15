@@ -21,7 +21,7 @@ const fraction = {
       },
     ],
   },
-  mutation: {
+  mutations: {
     addFraction(state) {
       return state.fractionList.unshift({ ...state.fraction, id: uniqueId() });
     },
