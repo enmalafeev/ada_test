@@ -38,8 +38,8 @@ export default {
   },
   computed: {
     ...mapState({
-      comment: state => state.comment,
-      comments: state => state.comments,
+      comment: state => state.websocket.comment,
+      comments: state => state.websocket.comments,
     }),
   },
   created() {

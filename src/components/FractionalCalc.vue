@@ -28,7 +28,7 @@ export default {
   },
   computed: {
     ...mapState({
-      fractionList: state => state.fractionList,
+      fractionList: state => state.fraction.fractionList,
     }),
     getResult() {
       return this.fractionList.reduce((cur, next) => {
