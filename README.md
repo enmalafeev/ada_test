@@ -1,7 +1,7 @@
 # ada_test
 
 ## Link to app
-[ada_tast](https://enmalafeev.github.io/ada_test/)
+[ada_test](https://enmalafeev.github.io/ada_test/docs)
 
 ## Project setup
 ```
